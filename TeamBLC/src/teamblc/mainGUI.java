@@ -5,6 +5,11 @@
  */
 package teamblc;
 
+import java.io.File;
+import javax.swing.JFileChooser;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+
 /**
  *
  * @author Corey
@@ -38,6 +43,9 @@ public class mainGUI extends javax.swing.JFrame {
         clearButton = new javax.swing.JButton();
         resultSection = new javax.swing.JPanel();
         adminTab = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        openFileDialog = new javax.swing.JButton();
+        searchFileTextBox = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -112,7 +120,7 @@ public class mainGUI extends javax.swing.JFrame {
         );
         resultSectionLayout.setVerticalGroup(
             resultSectionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 431, Short.MAX_VALUE)
+            .addGap(0, 413, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout searchTabLayout = new javax.swing.GroupLayout(searchTab);
@@ -125,22 +133,62 @@ public class mainGUI extends javax.swing.JFrame {
         searchTabLayout.setVerticalGroup(
             searchTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(searchTabLayout.createSequentialGroup()
-                .addComponent(searchSection, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(searchSection, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(resultSection, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(resultSection, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jTabbedPane1.addTab("Search", searchTab);
+
+        openFileDialog.setText("Open File...");
+        openFileDialog.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openFileDialogActionPerformed(evt);
+            }
+        });
+
+        searchFileTextBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchFileTextBoxActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(openFileDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(searchFileTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 667, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(43, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(37, 37, 37)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(openFileDialog)
+                    .addComponent(searchFileTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(43, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout adminTabLayout = new javax.swing.GroupLayout(adminTab);
         adminTab.setLayout(adminTabLayout);
         adminTabLayout.setHorizontalGroup(
             adminTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 798, Short.MAX_VALUE)
+            .addGap(0, 877, Short.MAX_VALUE)
+            .addGroup(adminTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         adminTabLayout.setVerticalGroup(
             adminTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 449, Short.MAX_VALUE)
+            .addGap(0, 546, Short.MAX_VALUE)
+            .addGroup(adminTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(adminTabLayout.createSequentialGroup()
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 437, Short.MAX_VALUE)))
         );
 
         jTabbedPane1.addTab("Admin", adminTab);
@@ -176,6 +224,29 @@ public class mainGUI extends javax.swing.JFrame {
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_searchButtonActionPerformed
+
+    private void openFileDialogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileDialogActionPerformed
+        SwingUtilities.invokeLater( new Runnable() {
+             public void run () {
+                 try {
+                     UIManager.setLookAndFeel(
+                         UIManager.getSystemLookAndFeelClassName() );
+                 } catch (Exception e) {} // Too bad; use Java's default LaF
+ 
+                 JFileChooser fileChooser = new JFileChooser( "." );
+                 int status = fileChooser.showOpenDialog( null );
+                 if ( status == JFileChooser.APPROVE_OPTION ) {
+                     File selectedFile = fileChooser.getSelectedFile();
+                     searchFileTextBox.setText(selectedFile.getParent()
+                        + "\\" + selectedFile.getName() );
+                 }
+             }
+        } );
+    }//GEN-LAST:event_openFileDialogActionPerformed
+
+    private void searchFileTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFileTextBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchFileTextBoxActionPerformed
 
     /**
      * @param args the command line arguments
@@ -215,10 +286,13 @@ public class mainGUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel adminTab;
     private javax.swing.JButton clearButton;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JButton openFileDialog;
     private javax.swing.JPanel resultSection;
     private javax.swing.JButton searchButton;
     private javax.swing.JComboBox searchDropDown1;
+    private javax.swing.JTextField searchFileTextBox;
     private javax.swing.JLabel searchLabel1;
     private javax.swing.JScrollPane searchScrollPanel1;
     private javax.swing.JPanel searchSection;
