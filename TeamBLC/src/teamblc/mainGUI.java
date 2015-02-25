@@ -12,7 +12,9 @@ import javax.swing.UIManager;
 
 /**
  *
- * @author Corey
+ * @author Corey Gunter
+ * @author Jamie Banas
+ * @author Chris Maxey
  */
 public class mainGUI extends javax.swing.JFrame {
 
@@ -56,6 +58,8 @@ public class mainGUI extends javax.swing.JFrame {
 
         searchScrollPanel1.setViewportView(searchTextPane1);
 
+        searchDropDown1.setBackground(new java.awt.Color(0, 204, 255));
+        searchDropDown1.setEditable(true);
         searchDropDown1.setMaximumRowCount(3);
         searchDropDown1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All of the Search Terms", "Any of the Search Terms", "Exact Match", " " }));
         searchDropDown1.addActionListener(new java.awt.event.ActionListener() {
@@ -64,6 +68,7 @@ public class mainGUI extends javax.swing.JFrame {
             }
         });
 
+        searchButton.setBackground(new java.awt.Color(0, 204, 255));
         searchButton.setText("Search");
         searchButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -71,6 +76,7 @@ public class mainGUI extends javax.swing.JFrame {
             }
         });
 
+        clearButton.setBackground(new java.awt.Color(0, 204, 255));
         clearButton.setText("Clear");
         clearButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

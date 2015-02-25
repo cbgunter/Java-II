@@ -143,6 +143,10 @@
                 </Container>
                 <Component class="javax.swing.JComboBox" name="searchDropDown1">
                   <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="ff" green="cc" red="0" type="rgb"/>
+                    </Property>
+                    <Property name="editable" type="boolean" value="true"/>
                     <Property name="maximumRowCount" type="int" value="3"/>
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="4">
@@ -159,6 +163,9 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="searchButton">
                   <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="ff" green="cc" red="0" type="rgb"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="Search"/>
                   </Properties>
                   <Events>
@@ -167,6 +174,9 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="clearButton">
                   <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="ff" green="cc" red="0" type="rgb"/>
+                    </Property>
                     <Property name="text" type="java.lang.String" value="Clear"/>
                   </Properties>
                   <Events>
