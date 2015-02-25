@@ -49,6 +49,7 @@ public class mainGUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jTabbedPane1.setBackground(new java.awt.Color(0, 204, 255));
         jTabbedPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Search Engine"));
 
         searchLabel1.setText("Search:");
@@ -110,6 +111,7 @@ public class mainGUI extends javax.swing.JFrame {
                 .addGap(50, 50, 50))
         );
 
+        resultSection.setBackground(new java.awt.Color(255, 255, 255));
         resultSection.setBorder(javax.swing.BorderFactory.createTitledBorder("Results"));
 
         javax.swing.GroupLayout resultSectionLayout = new javax.swing.GroupLayout(resultSection);
