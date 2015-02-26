@@ -7,6 +7,7 @@ package teamblc;
 
 import java.io.File;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
@@ -23,6 +24,12 @@ public class mainGUI extends javax.swing.JFrame {
      */
     public mainGUI() {
         initComponents();
+    }
+    
+    static void checkBlankInput(String userSub) {
+        if (userSub.equals("")){
+            JOptionPane.showMessageDialog(null, "input must not be blank");
+        }
     }
 
     /**
@@ -262,7 +269,7 @@ public class mainGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_clearButtonActionPerformed
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
-        // TODO add your handling code here:
+        checkBlankInput(searchTextPane1.getText());
     }//GEN-LAST:event_searchButtonActionPerformed
 
     private void openFileDialogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileDialogActionPerformed
