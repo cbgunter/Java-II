@@ -6,9 +6,26 @@
 package teamblc;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import java.text.SimpleDateFormat;
+import java.io.StringWriter;
+import javax.swing.table.DefaultTableModel;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /**
  *
@@ -238,7 +255,7 @@ public class mainGUI extends javax.swing.JFrame {
         jTable1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null}
+
             },
             new String [] {
                 "File Name", "Status", "Last Update Date", "Active"
@@ -346,21 +363,30 @@ public class mainGUI extends javax.swing.JFrame {
 
     private void openFileDialogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileDialogActionPerformed
         addFile();
-        }
+    }
 
     private void addFile() {
+   
         JFileChooser fileChooser = new JFileChooser( "." );
         int status = fileChooser.showOpenDialog( null );
         if ( status == JFileChooser.APPROVE_OPTION ) {
             File selectedFile = fileChooser.getSelectedFile();
             
-            //Set File Name in jTable1
-            int lastRow = jTable1.getRowCount()-1;
-            searchFileTextBox.setText(Integer.toString(lastRow));
-            jTable1.setValueAt( selectedFile.getParent() + "\\" + selectedFile.getName(), lastRow , 0 ); 
-            
-            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-            jTable1.setValueAt( sdf.format(selectedFile.lastModified()), lastRow, 2);
+        //Get new row information for table.
+        int lastRow = jTable1.getRowCount() ;
+        String fileName = selectedFile.getParent() + "\\" + selectedFile.getName();
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        String modifyDate = sdf.format(selectedFile.lastModified());
+        String isIndexed = "Indexed";                     
+        
+
+        //Set new row.
+        DefaultTableModel defaultModel = (DefaultTableModel) jTable1.getModel();
+            //System.out.println( "Debug: " + defaultModel.getColumnCount() );
+            defaultModel.addRow(new Object[]{fileName, modifyDate, isIndexed}); 
+
+        createXML(lastRow, fileName, modifyDate );
+        
     }
             
     }//GEN-LAST:event_openFileDialogActionPerformed
@@ -404,7 +430,20 @@ public class mainGUI extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> {
             new mainGUI().setVisible(true);
         });
-    }
+       
+      //Check for index file and create it if it doesn't exist.  
+      
+  	      File indexFile = new File(".\\Endex.xml");
+              if (!indexFile.isFile()){
+                  boolean isFileCreated = false;
+                    try{
+                        isFileCreated = indexFile.createNewFile();
+                        }
+                    catch(IOException ioe){
+                    }            
+            }
+        { 
+        }}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel adminTab;
@@ -431,4 +470,109 @@ public class mainGUI extends javax.swing.JFrame {
     private javax.swing.JPanel searchTab;
     private javax.swing.JTextPane searchTextPane1;
     // End of variables declaration//GEN-END:variables
-}
+
+    private void createXML( int row, String file, String date) {
+      String rowToString = Integer.toString(row);
+        
+        /*
+        try {
+            String rowToString = Integer.toString(row);
+            String[] input = {rowToString + "," + file + "," + date};
+            //String[] input = {"John Doe,123-456-7890", "Bob Smith,123-555-1212"};
+            String[] line = new String[2];
+            DocumentBuilderFactory dFact = DocumentBuilderFactory.newInstance();
+            DocumentBuilder build = dFact.newDocumentBuilder();
+            Document doc = build.newDocument();
+            Element root = doc.createElement("Root");
+            doc.appendChild(root);
+            Element fileList = doc.createElement("FileList");
+            root.appendChild(fileList);
+            for (int i = 0; i < input.length; i++) {
+                line = input[i].split(",");
+                Element position = doc.createElement("FilePosition");
+                fileList.appendChild(position);
+                position.appendChild(doc.createTextNode(line[0]));
+                Element name = doc.createElement("FileName");
+                name.appendChild(doc.createTextNode(line[1]));
+                position.appendChild(name);
+                Element mDate = doc.createElement("ModifyDate");
+                mDate.appendChild(doc.createTextNode(line[2]));
+                position.appendChild(mDate);
+           }
+            TransformerFactory tFact = TransformerFactory.newInstance();
+            Transformer trans = tFact.newTransformer();
+            trans.setOutputProperty(OutputKeys.INDENT, "yes");
+
+            StringWriter writer = new StringWriter();
+            StreamResult result = new StreamResult(writer);
+            DOMSource source = new DOMSource(doc);
+            trans.transform(source, result);
+            System.out.println(writer.toString());
+
+        } catch (TransformerException ex) {
+            System.out.println("Error outputting document");
+        } catch (ParserConfigurationException ex) {
+            System.out.println("Error building document");
+        }
+  */
+       DocumentBuilderFactory icFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder icBuilder;
+        try {
+            icBuilder = icFactory.newDocumentBuilder();
+            Document doc = icBuilder.newDocument();
+            Element mainRootElement = doc.createElementNS("www.teamBLC.net", "FileList");
+            doc.appendChild(mainRootElement);
+ 
+            // append child elements to root element
+            mainRootElement.appendChild(getFileList(doc, rowToString, file, date));
+            
+            // output DOM XML to console 
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes"); 
+            DOMSource source = new DOMSource(doc);
+            StreamResult result =  new StreamResult(new StringWriter());
+            //StreamResult result = new StreamResult(System.out);
+            transformer.transform(source, result);
+            
+            //Write to File
+            FileOutputStream fop = null;
+            File xmlFile;
+                
+                try{
+                    xmlFile = new File(".\\Endex.xml");
+                    fop = new FileOutputStream(xmlFile);
+                    
+                        String xmlString = result.getWriter().toString();
+                        //System.out.println("Debug: "xmlString);
+                        byte[] contentInBytes = xmlString.getBytes();
+
+                        fop.write(contentInBytes);
+                        fop.flush();
+                        fop.close();
+                }catch (IOException e) {
+            }
+ 
+            //System.out.println("\nXML DOM Created Successfully..");
+ 
+        } catch (ParserConfigurationException | DOMException | IllegalArgumentException | TransformerException e) {
+        }
+    }
+ 
+    private static Node getFileList(Document doc, String id, String name, String mdate) {
+        Element company = doc.createElement("FilePosition");
+        company.setAttribute("id", id);
+        company.appendChild(getListElements(doc, company, "FileName", name));
+        company.appendChild(getListElements(doc, company, "ModifyDate", mdate));
+        return company;
+    }
+ 
+    // utility method to create text node
+    private static Node getListElements(Document doc, Element element, String name, String value) {
+        Element node = doc.createElement(name);
+        node.appendChild(doc.createTextNode(value));
+        return node;
+    }
+   
+  }
+    
+
