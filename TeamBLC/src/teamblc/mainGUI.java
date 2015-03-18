@@ -5,13 +5,20 @@
  */
 package teamblc;
 
+import java.awt.List;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import java.text.SimpleDateFormat;
 import java.io.StringWriter;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -371,21 +378,22 @@ public class mainGUI extends javax.swing.JFrame {
         int status = fileChooser.showOpenDialog( null );
         if ( status == JFileChooser.APPROVE_OPTION ) {
             File selectedFile = fileChooser.getSelectedFile();
+            int lastRow = jTable1.getRowCount() ;
+            String fileName = selectedFile.getParent() + "\\" + selectedFile.getName();
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            String modifyDate = sdf.format(selectedFile.lastModified());
+            String isIndexed = "Indexed";
+            DefaultTableModel defaultModel = (DefaultTableModel) jTable1.getModel();
+            defaultModel.addRow(new Object[]{fileName, isIndexed, modifyDate});
             
-        //Get new row information for table.
-        int lastRow = jTable1.getRowCount() ;
-        String fileName = selectedFile.getParent() + "\\" + selectedFile.getName();
-        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-        String modifyDate = sdf.format(selectedFile.lastModified());
-        String isIndexed = "Indexed";                     
-        
-
-        //Set new row.
-        DefaultTableModel defaultModel = (DefaultTableModel) jTable1.getModel();
-            //System.out.println( "Debug: " + defaultModel.getColumnCount() );
-            defaultModel.addRow(new Object[]{fileName, modifyDate, isIndexed}); 
-
-        createXML(lastRow, fileName, modifyDate );
+            
+            createXML(lastRow, fileName, modifyDate );
+            
+            try {   
+                createArrayList(fileName);
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
         
     }
             
@@ -472,51 +480,11 @@ public class mainGUI extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void createXML( int row, String file, String date) {
-      String rowToString = Integer.toString(row);
+      
+       String rowToString = Integer.toString(row);
         
-        /*
-        try {
-            String rowToString = Integer.toString(row);
-            String[] input = {rowToString + "," + file + "," + date};
-            //String[] input = {"John Doe,123-456-7890", "Bob Smith,123-555-1212"};
-            String[] line = new String[2];
-            DocumentBuilderFactory dFact = DocumentBuilderFactory.newInstance();
-            DocumentBuilder build = dFact.newDocumentBuilder();
-            Document doc = build.newDocument();
-            Element root = doc.createElement("Root");
-            doc.appendChild(root);
-            Element fileList = doc.createElement("FileList");
-            root.appendChild(fileList);
-            for (int i = 0; i < input.length; i++) {
-                line = input[i].split(",");
-                Element position = doc.createElement("FilePosition");
-                fileList.appendChild(position);
-                position.appendChild(doc.createTextNode(line[0]));
-                Element name = doc.createElement("FileName");
-                name.appendChild(doc.createTextNode(line[1]));
-                position.appendChild(name);
-                Element mDate = doc.createElement("ModifyDate");
-                mDate.appendChild(doc.createTextNode(line[2]));
-                position.appendChild(mDate);
-           }
-            TransformerFactory tFact = TransformerFactory.newInstance();
-            Transformer trans = tFact.newTransformer();
-            trans.setOutputProperty(OutputKeys.INDENT, "yes");
-
-            StringWriter writer = new StringWriter();
-            StreamResult result = new StreamResult(writer);
-            DOMSource source = new DOMSource(doc);
-            trans.transform(source, result);
-            System.out.println(writer.toString());
-
-        } catch (TransformerException ex) {
-            System.out.println("Error outputting document");
-        } catch (ParserConfigurationException ex) {
-            System.out.println("Error building document");
-        }
-  */
        DocumentBuilderFactory icFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder icBuilder;
+       DocumentBuilder icBuilder;
         try {
             icBuilder = icFactory.newDocumentBuilder();
             Document doc = icBuilder.newDocument();
@@ -540,7 +508,7 @@ public class mainGUI extends javax.swing.JFrame {
                 
                 try{
                     xmlFile = new File(".\\Endex.xml");
-                    fop = new FileOutputStream(xmlFile);
+                    fop = new FileOutputStream(xmlFile, true);
                     
                         String xmlString = result.getWriter().toString();
                         //System.out.println("Debug: "xmlString);
@@ -572,7 +540,17 @@ public class mainGUI extends javax.swing.JFrame {
         node.appendChild(doc.createTextNode(value));
         return node;
     }
-   
+
+    private void createArrayList(String fileName) throws FileNotFoundException {
+        Scanner s = new Scanner(new File(fileName));
+        ArrayList<String> list = new ArrayList<String>();
+            while (s.hasNext()){
+            list.add(s.next());
+            }
+        s.close();
+    }
+
+       
   }
     
 
