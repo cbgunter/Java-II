@@ -29,10 +29,12 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import jdk.internal.org.xml.sax.SAXException;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -48,9 +50,9 @@ public class mainGUI extends javax.swing.JFrame {
     public mainGUI() {
         initComponents();
     }
-    
-    void checkBlankInput(String userSub,java.awt.Component comp) {
-        if (userSub.equals("")){
+
+    void checkBlankInput(String userSub, java.awt.Component comp) {
+        if (userSub.equals("")) {
             JOptionPane.showMessageDialog(comp, "Input must not be blank.");
         }
     }
@@ -83,6 +85,7 @@ public class mainGUI extends javax.swing.JFrame {
         savePathButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
@@ -221,19 +224,24 @@ public class mainGUI extends javax.swing.JFrame {
 
         jButton1.setLabel("Delete Selected Row..");
 
+        jLabel3.setForeground(new java.awt.Color(255, 0, 0));
+        jLabel3.setToolTipText("");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(searchFileTextBox))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(136, 136, 136)
                         .addComponent(openFileDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(savePathButton, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -252,7 +260,8 @@ public class mainGUI extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(openFileDialog)
                     .addComponent(savePathButton)
-                    .addComponent(jButton1))
+                    .addComponent(jButton1)
+                    .addComponent(jLabel3))
                 .addContainerGap(24, Short.MAX_VALUE))
         );
 
@@ -373,30 +382,35 @@ public class mainGUI extends javax.swing.JFrame {
     }
 
     private void addFile() {
-   
-        JFileChooser fileChooser = new JFileChooser( "." );
-        int status = fileChooser.showOpenDialog( null );
-        if ( status == JFileChooser.APPROVE_OPTION ) {
+
+        JFileChooser fileChooser = new JFileChooser(".");
+        int status = fileChooser.showOpenDialog(null);
+        if (status == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            int lastRow = jTable1.getRowCount() ;
+            int lastRow = jTable1.getRowCount();
             String fileName = selectedFile.getParent() + "\\" + selectedFile.getName();
-            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-            String modifyDate = sdf.format(selectedFile.lastModified());
-            String isIndexed = "Indexed";
-            DefaultTableModel defaultModel = (DefaultTableModel) jTable1.getModel();
-            defaultModel.addRow(new Object[]{fileName, isIndexed, modifyDate});
             
-            
-            createXML(lastRow, fileName, modifyDate );
-            
-            try {   
-                createArrayList(fileName);
-            } catch (FileNotFoundException ex) {
-                Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        
-    }
-            
+            boolean dupEntry = checkDuplicateEntry(fileName);
+                if (dupEntry){
+                    jLabel3.setText("This entry already exists!");
+                }
+                else{
+                    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                    String modifyDate = sdf.format(selectedFile.lastModified());
+                    String isIndexed = "Indexed";
+                
+                    DefaultTableModel defaultModel = (DefaultTableModel) jTable1.getModel();
+                    defaultModel.addRow(new Object[]{fileName, isIndexed, modifyDate});
+                        try {
+                            createXML(lastRow, fileName, modifyDate);
+                        } catch (org.xml.sax.SAXException ex) {
+                            Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+
+            //createArrayList(fileName);
+                }
+        }
+
     }//GEN-LAST:event_openFileDialogActionPerformed
 
     private void searchFileTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFileTextBoxActionPerformed
@@ -438,20 +452,20 @@ public class mainGUI extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(() -> {
             new mainGUI().setVisible(true);
         });
-       
+
       //Check for index file and create it if it doesn't exist.  
-      
-  	      File indexFile = new File(".\\Endex.xml");
-              if (!indexFile.isFile()){
-                  boolean isFileCreated = false;
-                    try{
-                        isFileCreated = indexFile.createNewFile();
-                        }
-                    catch(IOException ioe){
-                    }            
+        File indexFile = new File(".\\Endex.xml");
+        if (!indexFile.isFile()) {
+            boolean isFileCreated = false;
+            try {
+                isFileCreated = indexFile.createNewFile();
+            } catch (IOException ioe) {
             }
-        { 
-        }}
+        }
+        
+        //searchFileTextBox.setText(indexFile);
+        
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel adminTab;
@@ -459,6 +473,7 @@ public class mainGUI extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
@@ -479,53 +494,53 @@ public class mainGUI extends javax.swing.JFrame {
     private javax.swing.JTextPane searchTextPane1;
     // End of variables declaration//GEN-END:variables
 
-    private void createXML( int row, String file, String date) {
-      
-       String rowToString = Integer.toString(row);
-        
-       DocumentBuilderFactory icFactory = DocumentBuilderFactory.newInstance();
-       DocumentBuilder icBuilder;
+    private void createXML(int row, String file, String date) throws org.xml.sax.SAXException {
+              String rowToString = Integer.toString(row);
+
+        DocumentBuilderFactory icFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder icBuilder;
         try {
+            //Build XML and add root element.
             icBuilder = icFactory.newDocumentBuilder();
             Document doc = icBuilder.newDocument();
             Element mainRootElement = doc.createElementNS("www.teamBLC.net", "FileList");
             doc.appendChild(mainRootElement);
- 
+
             // append child elements to root element
             mainRootElement.appendChild(getFileList(doc, rowToString, file, date));
-            
+
             // output DOM XML to console 
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes"); 
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             DOMSource source = new DOMSource(doc);
-            StreamResult result =  new StreamResult(new StringWriter());
+            StreamResult result = new StreamResult(new StringWriter());
             //StreamResult result = new StreamResult(System.out);
             transformer.transform(source, result);
-            
+
             //Write to File
             FileOutputStream fop = null;
             File xmlFile;
-                
-                try{
-                    xmlFile = new File(".\\Endex.xml");
-                    fop = new FileOutputStream(xmlFile, true);
-                    
-                        String xmlString = result.getWriter().toString();
-                        //System.out.println("Debug: "xmlString);
-                        byte[] contentInBytes = xmlString.getBytes();
 
-                        fop.write(contentInBytes);
-                        fop.flush();
-                        fop.close();
-                }catch (IOException e) {
+            try {
+                xmlFile = new File(".\\Endex.xml");
+                fop = new FileOutputStream(xmlFile, true);
+
+                String xmlString = result.getWriter().toString();
+                //System.out.println("Debug: "xmlString);
+                byte[] contentInBytes = xmlString.getBytes();
+
+                fop.write(contentInBytes);
+                fop.flush();
+                fop.close();
+            } catch (IOException e) {
             }
- 
+
             //System.out.println("\nXML DOM Created Successfully..");
- 
         } catch (ParserConfigurationException | DOMException | IllegalArgumentException | TransformerException e) {
         }
     }
- 
+       
+    
     private static Node getFileList(Document doc, String id, String name, String mdate) {
         Element company = doc.createElement("FilePosition");
         company.setAttribute("id", id);
@@ -533,24 +548,45 @@ public class mainGUI extends javax.swing.JFrame {
         company.appendChild(getListElements(doc, company, "ModifyDate", mdate));
         return company;
     }
- 
+
     // utility method to create text node
     private static Node getListElements(Document doc, Element element, String name, String value) {
         Element node = doc.createElement(name);
         node.appendChild(doc.createTextNode(value));
         return node;
     }
-
+        
+        
+     /*
     private void createArrayList(String fileName) throws FileNotFoundException {
         Scanner s = new Scanner(new File(fileName));
         ArrayList<String> list = new ArrayList<String>();
-            while (s.hasNext()){
+        while (s.hasNext()) {
             list.add(s.next());
-            }
+        }
         s.close();
-    }
+        
+        //Checking the ArrayList
+        /*
+        for (int i = 0; i < list.size(); i++) {
+	    String value = list.get(i);
+	    System.out.println("Element: " + value);
+        }
+        */
 
-       
-  }
+    private boolean checkDuplicateEntry(String file) {
+        int column = 0;
+        
+        for (int i = 0; i < jTable1.getRowCount(); i++){
+            String found = jTable1.getValueAt(i, column).toString();
+            return found.equals(file);
+        }
+        return false;
+    }
+}
+        
+  
     
+    
+
 
