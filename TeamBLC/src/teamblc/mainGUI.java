@@ -223,6 +223,11 @@ public class mainGUI extends javax.swing.JFrame {
         jLabel2.setName(""); // NOI18N
 
         jButton1.setLabel("Delete Selected Row..");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jLabel3.setForeground(new java.awt.Color(255, 0, 0));
         jLabel3.setToolTipText("");
@@ -420,6 +425,11 @@ public class mainGUI extends javax.swing.JFrame {
     private void savePathButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_savePathButtonActionPerformed
         checkBlankInput(searchFileTextBox.getText(), adminTab);
     }//GEN-LAST:event_savePathButtonActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here: Jamie to delete records from XML table and Word List
+        System.out.println("Selected table record for deletion!");
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
