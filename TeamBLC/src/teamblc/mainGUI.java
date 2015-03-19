@@ -276,7 +276,8 @@ public class mainGUI extends javax.swing.JFrame {
         jTable1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {"Sample.txt", "Indexed", "2/28/2015",  new Boolean(true)},
+                {"Data.txt", "Updated", "3/18/2015",  new Boolean(false)}
             },
             new String [] {
                 "File Name", "Status", "Last Update Date", "Active"
