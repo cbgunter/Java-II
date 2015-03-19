@@ -414,6 +414,7 @@ public class mainGUI extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here: Jamie to delete records from XML table and Word List
+        System.out.println("Selected table record for deletion!");
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
