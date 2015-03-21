@@ -25,6 +25,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -304,9 +305,13 @@ public class mainGUI extends javax.swing.JFrame {
         jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
             jTable1.getColumnModel().getColumn(0).setMinWidth(500);
+            jTable1.getColumnModel().getColumn(0).setHeaderValue("File Name");
             jTable1.getColumnModel().getColumn(1).setMinWidth(25);
+            jTable1.getColumnModel().getColumn(1).setHeaderValue("Status");
             jTable1.getColumnModel().getColumn(2).setMinWidth(100);
+            jTable1.getColumnModel().getColumn(2).setHeaderValue("Last Update Date");
             jTable1.getColumnModel().getColumn(3).setMaxWidth(50);
+            jTable1.getColumnModel().getColumn(3).setHeaderValue("Active");
         }
 
         javax.swing.GroupLayout adminTabLayout = new javax.swing.GroupLayout(adminTab);
@@ -401,17 +406,34 @@ public class mainGUI extends javax.swing.JFrame {
                     jLabel3.setText("This entry already exists!");
                 }
                 else{
-                    SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
-                    String modifyDate = sdf.format(selectedFile.lastModified());
+                    
                     String isIndexed = "Indexed";
                 
                     DefaultTableModel defaultModel = (DefaultTableModel) jTable1.getModel();
-                    defaultModel.addRow(new Object[]{fileName, isIndexed, modifyDate});
-                        try {
-                            createXML(lastRow, fileName, modifyDate);
-                        } catch (org.xml.sax.SAXException ex) {
-                            Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+                    Document doc = null;
+                    try {
+                    doc = initXML();
+                    } catch (ParserConfigurationException ex) {
+                    Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    int ia = defaultModel.getRowCount();
+                    for (int i = 0; i < ia; i++){
+                        
+                        if (i == ia-1) {
+                        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+                        String modifyDate = sdf.format(selectedFile.lastModified());
+                        defaultModel.addRow(new Object[]{fileName, isIndexed, modifyDate});
+                        createXML(doc, i, fileName, modifyDate, true);
+                        } else {
+                        String fname = defaultModel.getValueAt(i, 0).toString();
+                        //int indexed = Integer.parseInt(defaultModel.getValueAt(i, 2).toString());
+                        String modDate = defaultModel.getValueAt(i, 2).toString();
+                        createXML(doc, i, fname, modDate, false);
+                        
                         }
+                        
+                        
+                    }
 
             //createArrayList(fileName);
                 }
@@ -438,6 +460,8 @@ public class mainGUI extends javax.swing.JFrame {
     static boolean isFileCreated;
     
     public static void main(String args[]) {
+    mainGUI MG = new mainGUI();
+    
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -466,7 +490,7 @@ public class mainGUI extends javax.swing.JFrame {
             new mainGUI().setVisible(true);
         });
 
-      //Check for index file and create it if it doesn't exist.
+       //Check for index file and create it if it doesn't exist.
         File indexFile = new File(".\\Endex.xml");
         if (!indexFile.isFile()) {
             isFileCreated = false;
@@ -494,16 +518,22 @@ public class mainGUI extends javax.swing.JFrame {
                 Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
             }
             Element docElement = dom.getDocumentElement();
+            
             NodeList nodeList = docElement.getChildNodes();
             if (nodeList != null && nodeList.getLength() > 0) {
                 for (int i = 0; i < nodeList.getLength(); i++) {
                     if (nodeList.item(i).getNodeType() == Node.ELEMENT_NODE) {
                         Element el = (Element) nodeList.item(i);
                         System.out.println("\nCurrent Element :" + el.getNodeName());
-                        if (el.getNodeName().contains("FileList")) {
+                        if (el.getNodeName().contains("File")) {
                             String filePosition = el.getElementsByTagName("FilePosition").item(0).getTextContent();
                             String fileName = el.getElementsByTagName("FileName").item(0).getTextContent();
                             String modifyDate = el.getElementsByTagName("ModifyDate").item(0).getTextContent();
+                            
+                            MG.setJtable(fileName, filePosition, modifyDate);
+                            
+                            
+                            
                         }
                     }
                 }
@@ -541,36 +571,59 @@ public class mainGUI extends javax.swing.JFrame {
     private javax.swing.JTextPane searchTextPane1;
     // End of variables declaration//GEN-END:variables
 
-    private void createXML(int row, String file, String date) throws org.xml.sax.SAXException {
-              String rowToString = Integer.toString(row);
+    
+    
+    private Document initXML() throws ParserConfigurationException {
 
         DocumentBuilderFactory icFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder icBuilder;
+        DocumentBuilder icBuilder = null;
+
+        //Build XML and add root element.
+        icBuilder = icFactory.newDocumentBuilder();
+        Document doc = icBuilder.newDocument();
+            
+        Element mainRootElement = doc.createElementNS("www.teamBLC.net", "FileList");
+        doc.appendChild(mainRootElement);
+            
+        return doc;
+    }
+    
+    private void createXML(Document doc, int row, String file, String date, boolean isFinal) {
         try {
-            //Build XML and add root element.
-            icBuilder = icFactory.newDocumentBuilder();
-            Document doc = icBuilder.newDocument();
-            Element mainRootElement = doc.createElementNS("www.teamBLC.net", "FileList");
-            doc.appendChild(mainRootElement);
-
+            String rowToString = Integer.toString(row);
             // append child elements to root element
-            mainRootElement.appendChild(getFileList(doc, rowToString, file, date));
-
-            // output DOM XML to console 
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            
+            Element mainElement = doc.getDocumentElement();
+            mainElement.appendChild(getFileList(doc, rowToString, file, date));
+            
+            // output DOM XML to console
+            Transformer transformer = null;
+            transformer = TransformerFactory.newInstance().newTransformer();
+            
+            
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             DOMSource source = new DOMSource(doc);
             StreamResult result = new StreamResult(new StringWriter());
+            
             //StreamResult result = new StreamResult(System.out);
             transformer.transform(source, result);
-
+            
+            if (isFinal) {
+                writeXMLFile(result);
+            }
+        } catch (TransformerException ex) {
+            Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void writeXMLFile(StreamResult result) {
             //Write to File
             FileOutputStream fop = null;
             File xmlFile;
 
             try {
                 xmlFile = new File(".\\Endex.xml");
-                fop = new FileOutputStream(xmlFile, true);
+                fop = new FileOutputStream(xmlFile, false);
 
                 String xmlString = result.getWriter().toString();
                 //System.out.println("Debug: "xmlString);
@@ -582,14 +635,12 @@ public class mainGUI extends javax.swing.JFrame {
             } catch (IOException e) {
             }
 
-            //System.out.println("\nXML DOM Created Successfully..");
-        } catch (ParserConfigurationException | DOMException | IllegalArgumentException | TransformerException e) {
-        }
+            //System.out.println("\nXML DOM Created Successfully..");       
     }
     
-    private static Node getFileList(Document doc, String id, String name, String mdate) {
-        Element company = doc.createElement("FilePosition");
-        company.setAttribute("id", id);
+    private Node getFileList(Document doc, String id, String name, String mdate) {
+        Element company = doc.createElement("File");
+        company.appendChild(getListElements(doc, company, "FilePosition", id));
         company.appendChild(getListElements(doc, company, "FileName", name));
         company.appendChild(getListElements(doc, company, "ModifyDate", mdate));
         return company;
@@ -628,6 +679,12 @@ public class mainGUI extends javax.swing.JFrame {
             return found.equals(file);
         }
         return false;
+    }
+    
+    public void setJtable(String fileName, String filePosition, String modifyDate) {
+        DefaultTableModel defaultModel = (DefaultTableModel) jTable1.getModel();
+        defaultModel.addRow(new Object[]{fileName, filePosition, modifyDate});
+        
     }
 }
         

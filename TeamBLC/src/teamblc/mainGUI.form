@@ -408,22 +408,22 @@
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                       <TableColumnModel selectionModel="2">
                         <Column maxWidth="-1" minWidth="500" prefWidth="-1" resizable="true">
-                          <Title/>
+                          <Title value="File Name"/>
                           <Editor/>
                           <Renderer/>
                         </Column>
                         <Column maxWidth="-1" minWidth="25" prefWidth="-1" resizable="true">
-                          <Title/>
+                          <Title value="Status"/>
                           <Editor/>
                           <Renderer/>
                         </Column>
                         <Column maxWidth="-1" minWidth="100" prefWidth="-1" resizable="true">
-                          <Title/>
+                          <Title value="Last Update Date"/>
                           <Editor/>
                           <Renderer/>
                         </Column>
                         <Column maxWidth="50" minWidth="-1" prefWidth="-1" resizable="true">
-                          <Title/>
+                          <Title value="Active"/>
                           <Editor/>
                           <Renderer/>
                         </Column>
