@@ -15,6 +15,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import java.text.SimpleDateFormat;
 import java.io.StringWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -277,8 +278,7 @@ public class mainGUI extends javax.swing.JFrame {
         jTable1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"Sample.txt", "Indexed", "2/28/2015",  new Boolean(true)},
-                {"Data.txt", "Updated", "3/18/2015",  new Boolean(false)}
+                {"Sample.txt", "Indexed", "2/28/2015",  new Boolean(true)}
             },
             new String [] {
                 "File Name", "Status", "Last Update Date", "Active"
@@ -305,13 +305,9 @@ public class mainGUI extends javax.swing.JFrame {
         jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
             jTable1.getColumnModel().getColumn(0).setMinWidth(500);
-            jTable1.getColumnModel().getColumn(0).setHeaderValue("File Name");
             jTable1.getColumnModel().getColumn(1).setMinWidth(25);
-            jTable1.getColumnModel().getColumn(1).setHeaderValue("Status");
             jTable1.getColumnModel().getColumn(2).setMinWidth(100);
-            jTable1.getColumnModel().getColumn(2).setHeaderValue("Last Update Date");
             jTable1.getColumnModel().getColumn(3).setMaxWidth(50);
-            jTable1.getColumnModel().getColumn(3).setHeaderValue("Active");
         }
 
         javax.swing.GroupLayout adminTabLayout = new javax.swing.GroupLayout(adminTab);
@@ -425,10 +421,9 @@ public class mainGUI extends javax.swing.JFrame {
                         defaultModel.addRow(new Object[]{fileName, isIndexed, modifyDate});
                         createXML(doc, i, fileName, modifyDate, true);
                         } else {
-                        String fname = defaultModel.getValueAt(i, 0).toString();
-                        //int indexed = Integer.parseInt(defaultModel.getValueAt(i, 2).toString());
-                        String modDate = defaultModel.getValueAt(i, 2).toString();
-                        createXML(doc, i, fname, modDate, false);
+                            String fname = defaultModel.getValueAt(i, 0).toString();
+                            String modDate = defaultModel.getValueAt(i, 2).toString();
+                            createXML(doc, i, fname, modDate, false);
                         
                         }
                         
@@ -459,8 +454,35 @@ public class mainGUI extends javax.swing.JFrame {
      */
     static boolean isFileCreated;
     
-    public static void main(String args[]) {
-    mainGUI MG = new mainGUI();
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel adminTab;
+    private javax.swing.JButton clearButton;
+    private javax.swing.JButton deleteSelectedBttn;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    public static javax.swing.JTable jTable1;
+    private javax.swing.JButton openFileDialog;
+    private javax.swing.JPanel resultSection;
+    private javax.swing.JTextPane resultsTextPane;
+    private javax.swing.JButton savePathButton;
+    private javax.swing.JButton searchButton;
+    private javax.swing.JComboBox searchDropDown1;
+    private javax.swing.JTextField searchFileTextBox;
+    private javax.swing.JLabel searchLabel1;
+    private javax.swing.JScrollPane searchScrollPanel1;
+    private javax.swing.JPanel searchSection;
+    private javax.swing.JPanel searchTab;
+    private javax.swing.JTextPane searchTextPane1;
+    // End of variables declaration//GEN-END:variables
+
+        public static void main(String args[]) {
     
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -484,11 +506,16 @@ public class mainGUI extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(mainGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-            new mainGUI().setVisible(true);
-        });
+        try {
+            /* Create and display the form */
+            java.awt.EventQueue.invokeAndWait(()-> {
+                new mainGUI().setVisible(true);
+            });
+        } catch (InterruptedException ex) {
+            Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvocationTargetException ex) {
+            Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
        //Check for index file and create it if it doesn't exist.
         File indexFile = new File(".\\Endex.xml");
@@ -529,10 +556,10 @@ public class mainGUI extends javax.swing.JFrame {
                             String filePosition = el.getElementsByTagName("FilePosition").item(0).getTextContent();
                             String fileName = el.getElementsByTagName("FileName").item(0).getTextContent();
                             String modifyDate = el.getElementsByTagName("ModifyDate").item(0).getTextContent();
+                            String isIndexed = "Indexed";
                             
-                            MG.setJtable(fileName, filePosition, modifyDate);
-                            
-                            
+                            DefaultTableModel defaultModel = (DefaultTableModel) jTable1.getModel();
+                            defaultModel.addRow(new Object[]{fileName, isIndexed, modifyDate});
                             
                         }
                     }
@@ -543,35 +570,6 @@ public class mainGUI extends javax.swing.JFrame {
         //searchFileTextBox.setText(indexFile);
         
     }
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel adminTab;
-    private javax.swing.JButton clearButton;
-    private javax.swing.JButton deleteSelectedBttn;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JButton openFileDialog;
-    private javax.swing.JPanel resultSection;
-    private javax.swing.JTextPane resultsTextPane;
-    private javax.swing.JButton savePathButton;
-    private javax.swing.JButton searchButton;
-    private javax.swing.JComboBox searchDropDown1;
-    private javax.swing.JTextField searchFileTextBox;
-    private javax.swing.JLabel searchLabel1;
-    private javax.swing.JScrollPane searchScrollPanel1;
-    private javax.swing.JPanel searchSection;
-    private javax.swing.JPanel searchTab;
-    private javax.swing.JTextPane searchTextPane1;
-    // End of variables declaration//GEN-END:variables
-
-    
     
     private Document initXML() throws ParserConfigurationException {
 
@@ -681,11 +679,6 @@ public class mainGUI extends javax.swing.JFrame {
         return false;
     }
     
-    public void setJtable(String fileName, String filePosition, String modifyDate) {
-        DefaultTableModel defaultModel = (DefaultTableModel) jTable1.getModel();
-        defaultModel.addRow(new Object[]{fileName, filePosition, modifyDate});
-        
-    }
 }
         
   

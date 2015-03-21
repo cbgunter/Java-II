@@ -385,22 +385,18 @@
                       </Border>
                     </Property>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="4" rowCount="2">
+                      <Table columnCount="4" rowCount="1">
                         <Column editable="false" title="File Name" type="java.lang.Object">
                           <Data value="Sample.txt"/>
-                          <Data value="Data.txt"/>
                         </Column>
                         <Column editable="false" title="Status" type="java.lang.Object">
                           <Data value="Indexed"/>
-                          <Data value="Updated"/>
                         </Column>
                         <Column editable="false" title="Last Update Date" type="java.lang.Object">
                           <Data value="2/28/2015"/>
-                          <Data value="3/18/2015"/>
                         </Column>
                         <Column editable="true" title="Active" type="java.lang.Boolean">
                           <Data value="true"/>
-                          <Data value="false"/>
                         </Column>
                       </Table>
                     </Property>
@@ -408,22 +404,22 @@
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                       <TableColumnModel selectionModel="2">
                         <Column maxWidth="-1" minWidth="500" prefWidth="-1" resizable="true">
-                          <Title value="File Name"/>
+                          <Title/>
                           <Editor/>
                           <Renderer/>
                         </Column>
                         <Column maxWidth="-1" minWidth="25" prefWidth="-1" resizable="true">
-                          <Title value="Status"/>
+                          <Title/>
                           <Editor/>
                           <Renderer/>
                         </Column>
                         <Column maxWidth="-1" minWidth="100" prefWidth="-1" resizable="true">
-                          <Title value="Last Update Date"/>
+                          <Title/>
                           <Editor/>
                           <Renderer/>
                         </Column>
                         <Column maxWidth="50" minWidth="-1" prefWidth="-1" resizable="true">
-                          <Title value="Active"/>
+                          <Title/>
                           <Editor/>
                           <Renderer/>
                         </Column>
@@ -436,6 +432,9 @@
                       <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                     </Property>
                   </Properties>
+                  <AuxValues>
+                    <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="9"/>
+                  </AuxValues>
                 </Component>
               </SubComponents>
             </Container>
