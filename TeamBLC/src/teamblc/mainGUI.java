@@ -84,7 +84,7 @@ public class mainGUI extends javax.swing.JFrame {
         openFileDialog = new javax.swing.JButton();
         savePathButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        deleteSelectedBttn = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -174,7 +174,7 @@ public class mainGUI extends javax.swing.JFrame {
         );
         resultSectionLayout.setVerticalGroup(
             resultSectionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 478, Short.MAX_VALUE)
+            .addGap(0, 483, Short.MAX_VALUE)
             .addGroup(resultSectionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(resultSectionLayout.createSequentialGroup()
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 467, Short.MAX_VALUE)
@@ -222,10 +222,10 @@ public class mainGUI extends javax.swing.JFrame {
         jLabel2.setText("Index File Location:");
         jLabel2.setName(""); // NOI18N
 
-        jButton1.setLabel("Delete Selected Row..");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        deleteSelectedBttn.setLabel("Delete Selected Row..");
+        deleteSelectedBttn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                deleteSelectedBttnActionPerformed(evt);
             }
         });
 
@@ -251,7 +251,7 @@ public class mainGUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(savePathButton, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(deleteSelectedBttn, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -265,7 +265,7 @@ public class mainGUI extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(openFileDialog)
                     .addComponent(savePathButton)
-                    .addComponent(jButton1)
+                    .addComponent(deleteSelectedBttn)
                     .addComponent(jLabel3))
                 .addContainerGap(24, Short.MAX_VALUE))
         );
@@ -427,14 +427,16 @@ public class mainGUI extends javax.swing.JFrame {
         checkBlankInput(searchFileTextBox.getText(), adminTab);
     }//GEN-LAST:event_savePathButtonActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void deleteSelectedBttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteSelectedBttnActionPerformed
         // TODO add your handling code here: Jamie to delete records from XML table and Word List
         System.out.println("Selected table record for deletion!");
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_deleteSelectedBttnActionPerformed
 
     /**
      * @param args the command line arguments
      */
+    static boolean isFileCreated;
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -464,13 +466,47 @@ public class mainGUI extends javax.swing.JFrame {
             new mainGUI().setVisible(true);
         });
 
-      //Check for index file and create it if it doesn't exist.  
+      //Check for index file and create it if it doesn't exist.
         File indexFile = new File(".\\Endex.xml");
         if (!indexFile.isFile()) {
-            boolean isFileCreated = false;
+            isFileCreated = false;
             try {
                 isFileCreated = indexFile.createNewFile();
             } catch (IOException ioe) {
+            }
+        }
+        
+        if (isFileCreated == false) {
+            //load content from xml into jtable
+            DocumentBuilderFactory builderFact = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = null;
+            try {
+                builder = builderFact.newDocumentBuilder();
+            } catch (ParserConfigurationException ex) {
+                Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            Document dom = null;
+            try {
+                dom = builder.parse(".\\Endex.xml");
+            } catch (org.xml.sax.SAXException ex) {
+                Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            Element docElement = dom.getDocumentElement();
+            NodeList nodeList = docElement.getChildNodes();
+            if (nodeList != null && nodeList.getLength() > 0) {
+                for (int i = 0; i < nodeList.getLength(); i++) {
+                    if (nodeList.item(i).getNodeType() == Node.ELEMENT_NODE) {
+                        Element el = (Element) nodeList.item(i);
+                        System.out.println("\nCurrent Element :" + el.getNodeName());
+                        if (el.getNodeName().contains("FileList")) {
+                            String filePosition = el.getElementsByTagName("FilePosition").item(0).getTextContent();
+                            String fileName = el.getElementsByTagName("FileName").item(0).getTextContent();
+                            String modifyDate = el.getElementsByTagName("ModifyDate").item(0).getTextContent();
+                        }
+                    }
+                }
             }
         }
         
@@ -481,7 +517,7 @@ public class mainGUI extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel adminTab;
     private javax.swing.JButton clearButton;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton deleteSelectedBttn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -550,7 +586,6 @@ public class mainGUI extends javax.swing.JFrame {
         } catch (ParserConfigurationException | DOMException | IllegalArgumentException | TransformerException e) {
         }
     }
-       
     
     private static Node getFileList(Document doc, String id, String name, String mdate) {
         Element company = doc.createElement("FilePosition");
