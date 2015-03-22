@@ -97,6 +97,11 @@ public class mainGUI extends javax.swing.JFrame {
 
         jTabbedPane1.setBackground(new java.awt.Color(0, 204, 255));
         jTabbedPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Search Engine"));
+        jTabbedPane1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTabbedPane1MouseClicked(evt);
+            }
+        });
 
         searchLabel1.setText("Search:");
 
@@ -201,6 +206,12 @@ public class mainGUI extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Search", searchTab);
 
+        adminTab.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                adminTabFocusGained(evt);
+            }
+        });
+
         searchFileTextBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 searchFileTextBoxActionPerformed(evt);
@@ -214,7 +225,7 @@ public class mainGUI extends javax.swing.JFrame {
             }
         });
 
-        savePathButton.setLabel("Update Files...");
+        savePathButton.setText("Re - Index...");
         savePathButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 savePathButtonActionPerformed(evt);
@@ -301,6 +312,11 @@ public class mainGUI extends javax.swing.JFrame {
         });
         jTable1.setCellSelectionEnabled(true);
         jTable1.setGridColor(new java.awt.Color(0, 0, 0));
+        jTable1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTable1FocusGained(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTable1);
         jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
@@ -384,6 +400,7 @@ public class mainGUI extends javax.swing.JFrame {
         checkBlankInput(searchTextPane1.getText(), searchTab);
     }//GEN-LAST:event_searchButtonActionPerformed
 
+    //Fixes Issue#2 - Allows entry of new file to jTable and popualtes requires info.
     private void openFileDialogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileDialogActionPerformed
         addFile();
     }
@@ -394,15 +411,17 @@ public class mainGUI extends javax.swing.JFrame {
         int status = fileChooser.showOpenDialog(null);
         if (status == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
-            int lastRow = jTable1.getRowCount();
+            //int lastRow = jTable1.getRowCount();
             String fileName = selectedFile.getParent() + "\\" + selectedFile.getName();
             
+            //Fixes issue #8, checks for Duplicate file names in jTable1.
             boolean dupEntry = checkDuplicateEntry(fileName);
                 if (dupEntry){
                     jLabel3.setText("This entry already exists!");
                 }
                 else{
                     
+                    jLabel3.setText(""); //Fixes Issue #9 - Set's error message for dup entry blank.
                     String isIndexed = "Indexed";
                 
                     DefaultTableModel defaultModel = (DefaultTableModel) jTable1.getModel();
@@ -413,10 +432,10 @@ public class mainGUI extends javax.swing.JFrame {
                     Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     //int ia = defaultModel.getRowCount();
-                    int ia = defaultModel.getRowCount() +1 ;
-                    System.out.println("IA= " + ia);
+                    int ia = defaultModel.getRowCount() +1 ; //+1 to fix for loop (could have fixed for loop).
+                    //System.out.println("IA= " + ia);
                     for (int i = 0; i < ia; i++){
-                        System.out.println(i);
+                        //System.out.println(i);
                         if (i == ia-1) {
                         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
                         String modifyDate = sdf.format(selectedFile.lastModified());
@@ -450,6 +469,19 @@ public class mainGUI extends javax.swing.JFrame {
         // TODO add your handling code here: Jamie to delete records from XML table and Word List
         System.out.println("Selected table record for deletion!");
     }//GEN-LAST:event_deleteSelectedBttnActionPerformed
+
+    private void jTable1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTable1FocusGained
+        
+    }//GEN-LAST:event_jTable1FocusGained
+
+    private void adminTabFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_adminTabFocusGained
+        
+    }//GEN-LAST:event_adminTabFocusGained
+
+    //Fixes Issue #5. Checks for updated files and advises to reindex files.
+    private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
+        checkTheDates();
+    }//GEN-LAST:event_jTabbedPane1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -528,10 +560,9 @@ public class mainGUI extends javax.swing.JFrame {
                 } catch (IOException ioe) {
             }
         }
+        //If index file exists, load entries to jTable.
+        else if (indexFile.isFile()){
         
-        
-        if (isFileCreated == false) {
-            //load content from xml into jtable
             DocumentBuilderFactory builderFact = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = null;
             try {
@@ -552,7 +583,7 @@ public class mainGUI extends javax.swing.JFrame {
                 for (int i = 0; i < nodeList.getLength(); i++) {
                     if (nodeList.item(i).getNodeType() == Node.ELEMENT_NODE) {
                         Element el = (Element) nodeList.item(i);
-                        System.out.println("\nCurrent Element :" + el.getNodeName());
+                        //System.out.println("\nCurrent Element :" + el.getNodeName());
                         if (el.getNodeName().contains("File")) {
                             String filePosition = el.getElementsByTagName("FilePosition").item(0).getTextContent();
                             String fileName = el.getElementsByTagName("FileName").item(0).getTextContent();
@@ -678,6 +709,38 @@ public class mainGUI extends javax.swing.JFrame {
             return found.equals(file);
         }
         return false;
+    }
+
+    private void checkTheDates() {
+        int ib = jTable1.getRowCount();
+        for (int i = 0; i < ib; i++){
+            int fileColumn = 0;
+            int statusColumn = 1;
+            int mDateColumn = 2;
+            
+            String currentFile = jTable1.getValueAt(i, fileColumn).toString();
+            File file = new File(currentFile);
+            SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+            String newModifyDate = sdf.format(file.lastModified());
+            String currentModifyDate = jTable1.getValueAt(i, mDateColumn).toString();
+            
+            //System.out.println("New: " + newModifyDate);
+            //System.out.println("Current: " + currentModifyDate);
+            
+            boolean isUpdateToDate = newModifyDate.equals(currentModifyDate);
+                //System.out.println(isUpdateToDate);
+            
+            if (!isUpdateToDate){
+                String isNotCurrent = "Out of Date";
+                jTable1.setValueAt(isNotCurrent, i, statusColumn);
+            }
+            /*
+            else{
+                String isCurrent = "Indexed";
+                jTable1.setValueAt(isCurrent, i, statusColumn);
+            }
+                    */
+        }
     }
     
 }
