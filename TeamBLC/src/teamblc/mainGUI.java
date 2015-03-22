@@ -421,7 +421,7 @@ public class mainGUI extends javax.swing.JFrame {
                 }
                 else{
                     
-                    jLabel3.setText(""); //Fixes Issue #9 - Set's error message for dup entry blank.
+                    jLabel3.setText(""); //Fixes Issue #9 - Sets error message for dup entry blank if allwoing the add.
                     String isIndexed = "Indexed";
                 
                     DefaultTableModel defaultModel = (DefaultTableModel) jTable1.getModel();
