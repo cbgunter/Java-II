@@ -385,19 +385,11 @@
                       </Border>
                     </Property>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="4" rowCount="1">
-                        <Column editable="false" title="File Name" type="java.lang.Object">
-                          <Data value="Sample.txt"/>
-                        </Column>
-                        <Column editable="false" title="Status" type="java.lang.Object">
-                          <Data value="Indexed"/>
-                        </Column>
-                        <Column editable="false" title="Last Update Date" type="java.lang.Object">
-                          <Data value="2/28/2015"/>
-                        </Column>
-                        <Column editable="true" title="Active" type="java.lang.Boolean">
-                          <Data value="true"/>
-                        </Column>
+                      <Table columnCount="4" rowCount="0">
+                        <Column editable="false" title="File Name" type="java.lang.Object"/>
+                        <Column editable="false" title="Status" type="java.lang.Object"/>
+                        <Column editable="false" title="Last Update Date" type="java.lang.Object"/>
+                        <Column editable="true" title="Active" type="java.lang.Boolean"/>
                       </Table>
                     </Property>
                     <Property name="cellSelectionEnabled" type="boolean" value="true"/>

@@ -278,7 +278,7 @@ public class mainGUI extends javax.swing.JFrame {
         jTable1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {"Sample.txt", "Indexed", "2/28/2015",  new Boolean(true)}
+
             },
             new String [] {
                 "File Name", "Status", "Last Update Date", "Active"
@@ -412,9 +412,11 @@ public class mainGUI extends javax.swing.JFrame {
                     } catch (ParserConfigurationException ex) {
                     Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    int ia = defaultModel.getRowCount();
+                    //int ia = defaultModel.getRowCount();
+                    int ia = defaultModel.getRowCount() +1 ;
+                    System.out.println("IA= " + ia);
                     for (int i = 0; i < ia; i++){
-                        
+                        System.out.println(i);
                         if (i == ia-1) {
                         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
                         String modifyDate = sdf.format(selectedFile.lastModified());
@@ -520,12 +522,13 @@ public class mainGUI extends javax.swing.JFrame {
        //Check for index file and create it if it doesn't exist.
         File indexFile = new File(".\\Endex.xml");
         if (!indexFile.isFile()) {
-            isFileCreated = false;
+            boolean isFileCreated = false;
             try {
                 isFileCreated = indexFile.createNewFile();
-            } catch (IOException ioe) {
+                } catch (IOException ioe) {
             }
         }
+        
         
         if (isFileCreated == false) {
             //load content from xml into jtable
@@ -539,9 +542,7 @@ public class mainGUI extends javax.swing.JFrame {
             Document dom = null;
             try {
                 dom = builder.parse(".\\Endex.xml");
-            } catch (org.xml.sax.SAXException ex) {
-                Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
+            } catch (org.xml.sax.SAXException | IOException ex) {
                 Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
             }
             Element docElement = dom.getDocumentElement();
