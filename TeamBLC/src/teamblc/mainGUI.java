@@ -44,8 +44,11 @@ import org.w3c.dom.NodeList;
  * @author Jamie Banas
  * @author Chris Maxey
  */
-public class mainGUI extends javax.swing.JFrame {
+interface TeamBLCConstants {
+            static final String ENDEX_FILE = "Endex.xml";
+}
 
+public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
     /**
      * Creates new form mainGUI
      */
@@ -486,8 +489,8 @@ public class mainGUI extends javax.swing.JFrame {
     private javax.swing.JTextPane searchTextPane1;
     // End of variables declaration//GEN-END:variables
 
-        public static void main(String args[]) {
     
+        public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -522,7 +525,7 @@ public class mainGUI extends javax.swing.JFrame {
         }
 
        //Check for index file and create it if it doesn't exist.
-        File indexFile = new File("."+System.getProperty("file.separator")+"Endex.xml");
+        File indexFile = new File("."+System.getProperty("file.separator")+ENDEX_FILE);
         if (!indexFile.isFile()) {
             boolean isFileCreated = false;
             try {
@@ -542,7 +545,7 @@ public class mainGUI extends javax.swing.JFrame {
             }
             Document dom = null;
             try {
-                dom = builder.parse("."+System.getProperty("file.separator")+"Endex.xml");
+                dom = builder.parse("."+System.getProperty("file.separator")+ENDEX_FILE);
             } catch (org.xml.sax.SAXException | IOException ex) {
                 Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -622,7 +625,7 @@ public class mainGUI extends javax.swing.JFrame {
             File xmlFile;
 
             try {
-                xmlFile = new File(".\\Endex.xml");
+                xmlFile = new File("."+System.getProperty("file.separator")+ENDEX_FILE);
                 fop = new FileOutputStream(xmlFile, false);
 
                 String xmlString = result.getWriter().toString();
@@ -712,11 +715,4 @@ public class mainGUI extends javax.swing.JFrame {
                     */
         }
     }
-    
 }
-        
-  
-    
-    
-
-
