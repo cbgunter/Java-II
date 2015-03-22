@@ -468,6 +468,13 @@ public class mainGUI extends javax.swing.JFrame {
     private void deleteSelectedBttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteSelectedBttnActionPerformed
         // TODO add your handling code here: Jamie to delete records from XML table and Word List
         System.out.println("Selected table record for deletion!");
+        int column = 3;
+        for (int i = 0; i < jTable1.getRowCount(); i++){
+            DefaultTableModel defaultModel = (DefaultTableModel) jTable1.getModel();
+            if (jTable1.getValueAt(i, column).equals(true)) {
+                System.out.println("deleting row " + i);
+                defaultModel.removeRow(i);
+            }}
     }//GEN-LAST:event_deleteSelectedBttnActionPerformed
 
     private void jTable1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTable1FocusGained
@@ -481,15 +488,6 @@ public class mainGUI extends javax.swing.JFrame {
     //Fixes Issue #5. Checks for updated files and advises to reindex files.
     private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
         checkTheDates();
-        int column = 3;
-        
-        for (int i = 0; i < jTable1.getRowCount(); i++){
-            DefaultTableModel defaultModel = (DefaultTableModel) jTable1.getModel();
-            if (jTable1.getValueAt(i, column).equals(true)) {
-                System.out.println("deleting row " + i);
-                defaultModel.removeRow(i);
-            }}
-
     }//GEN-LAST:event_jTabbedPane1MouseClicked
 
     /**
