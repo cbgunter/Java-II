@@ -235,7 +235,7 @@ public class mainGUI extends javax.swing.JFrame {
         jLabel2.setText("Index File Location:");
         jLabel2.setName(""); // NOI18N
 
-        deleteSelectedBttn.setLabel("Delete Selected Row..");
+        deleteSelectedBttn.setText("Delete Selected");
         deleteSelectedBttn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 deleteSelectedBttnActionPerformed(evt);
@@ -292,7 +292,7 @@ public class mainGUI extends javax.swing.JFrame {
 
             },
             new String [] {
-                "File Name", "Status", "Last Update Date", "Active"
+                "File Name", "Status", "Last Update Date", "Selected"
             }
         ) {
             Class[] types = new Class [] {
@@ -481,6 +481,15 @@ public class mainGUI extends javax.swing.JFrame {
     //Fixes Issue #5. Checks for updated files and advises to reindex files.
     private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
         checkTheDates();
+        int column = 3;
+        
+        for (int i = 0; i < jTable1.getRowCount(); i++){
+            DefaultTableModel defaultModel = (DefaultTableModel) jTable1.getModel();
+            if (jTable1.getValueAt(i, column).equals(true)) {
+                System.out.println("deleting row " + i);
+                defaultModel.removeRow(i);
+            }}
+
     }//GEN-LAST:event_jTabbedPane1MouseClicked
 
     /**

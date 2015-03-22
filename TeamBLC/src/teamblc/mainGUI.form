@@ -359,7 +359,7 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="deleteSelectedBttn">
                   <Properties>
-                    <Property name="label" type="java.lang.String" value="Delete Selected Row.."/>
+                    <Property name="text" type="java.lang.String" value="Delete Selected"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="deleteSelectedBttnActionPerformed"/>
@@ -395,7 +395,7 @@
                         <Column editable="false" title="File Name" type="java.lang.Object"/>
                         <Column editable="false" title="Status" type="java.lang.Object"/>
                         <Column editable="false" title="Last Update Date" type="java.lang.Object"/>
-                        <Column editable="true" title="Active" type="java.lang.Boolean"/>
+                        <Column editable="true" title="Selected" type="java.lang.Boolean"/>
                       </Table>
                     </Property>
                     <Property name="cellSelectionEnabled" type="boolean" value="true"/>
