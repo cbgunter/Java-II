@@ -413,7 +413,7 @@ public class mainGUI extends javax.swing.JFrame {
                         if (i == ia-1) {
                         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
                         String modifyDate = sdf.format(selectedFile.lastModified());
-                        defaultModel.addRow(new Object[]{fileName, isIndexed, modifyDate});
+                        defaultModel.addRow(new Object[]{fileName, isIndexed, modifyDate, false});
                         createXML(doc, i, fileName, modifyDate, true);
                         } else {
                             String fname = defaultModel.getValueAt(i, 0).toString();
@@ -439,6 +439,7 @@ public class mainGUI extends javax.swing.JFrame {
         // TODO add your handling code here: Jamie to delete records from XML table and Word List
         System.out.println("Selected table record for deletion!");
         int activeColumn = 3;
+              
         for (int i = 0; i < jTable1.getRowCount(); i++){
             DefaultTableModel defaultModel = (DefaultTableModel) jTable1.getModel();
             if (jTable1.getValueAt(i, activeColumn).equals(true)) {
@@ -560,7 +561,7 @@ public class mainGUI extends javax.swing.JFrame {
                             String isIndexed = "Indexed";
                             
                             DefaultTableModel defaultModel = (DefaultTableModel) jTable1.getModel();
-                            defaultModel.addRow(new Object[]{fileName, isIndexed, modifyDate});
+                            defaultModel.addRow(new Object[]{fileName, isIndexed, modifyDate, false});
                             
                         }
                     }
