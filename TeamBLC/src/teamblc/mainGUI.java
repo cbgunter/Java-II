@@ -45,7 +45,7 @@ import org.w3c.dom.NodeList;
  * @author Chris Maxey
  */
 interface TeamBLCConstants {
-            static final String ENDEX_FILE = "Endex.xml";
+    static final String ENDEX_FILE = "Endex.xml"; // Filename to store file records in XML.
 }
 
 public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
@@ -389,7 +389,7 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
         if (status == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
             //int lastRow = jTable1.getRowCount();
-            String fileName = selectedFile.getParent() + "\\" + selectedFile.getName();
+            String fileName = selectedFile.getParent() + System.getProperty("file.separator") + selectedFile.getName();
             
             //Fixes issue #8, checks for Duplicate file names in jTable1.
             boolean dupEntry = checkDuplicateEntry(fileName);
@@ -422,12 +422,8 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
                             String fname = defaultModel.getValueAt(i, 0).toString();
                             String modDate = defaultModel.getValueAt(i, 2).toString();
                             createXML(doc, i, fname, modDate, false);
-                        
                         }
-                        
-                        
                     }
-
             //createArrayList(fileName);
                 }
         }
