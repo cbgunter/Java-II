@@ -111,11 +111,6 @@ public class mainGUI extends javax.swing.JFrame {
         searchDropDown1.setEditable(true);
         searchDropDown1.setMaximumRowCount(3);
         searchDropDown1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All of the Search Terms", "Any of the Search Terms", "Exact Match", " " }));
-        searchDropDown1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchDropDown1ActionPerformed(evt);
-            }
-        });
 
         searchButton.setBackground(new java.awt.Color(0, 204, 255));
         searchButton.setText("Search");
@@ -205,18 +200,6 @@ public class mainGUI extends javax.swing.JFrame {
         );
 
         jTabbedPane1.addTab("Search", searchTab);
-
-        adminTab.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                adminTabFocusGained(evt);
-            }
-        });
-
-        searchFileTextBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                searchFileTextBoxActionPerformed(evt);
-            }
-        });
 
         openFileDialog.setLabel("Add File...");
         openFileDialog.addActionListener(new java.awt.event.ActionListener() {
@@ -312,11 +295,6 @@ public class mainGUI extends javax.swing.JFrame {
         });
         jTable1.setCellSelectionEnabled(true);
         jTable1.setGridColor(new java.awt.Color(0, 0, 0));
-        jTable1.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jTable1FocusGained(evt);
-            }
-        });
         jScrollPane2.setViewportView(jTable1);
         jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
@@ -387,10 +365,6 @@ public class mainGUI extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void searchDropDown1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchDropDown1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_searchDropDown1ActionPerformed
-
     private void clearButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clearButtonActionPerformed
         searchTextPane1.setText(null);
         resultsTextPane.setText(null);
@@ -457,10 +431,6 @@ public class mainGUI extends javax.swing.JFrame {
 
     }//GEN-LAST:event_openFileDialogActionPerformed
 
-    private void searchFileTextBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFileTextBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_searchFileTextBoxActionPerformed
-
     private void savePathButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_savePathButtonActionPerformed
         checkBlankInput(searchFileTextBox.getText(), adminTab);
     }//GEN-LAST:event_savePathButtonActionPerformed
@@ -468,22 +438,14 @@ public class mainGUI extends javax.swing.JFrame {
     private void deleteSelectedBttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteSelectedBttnActionPerformed
         // TODO add your handling code here: Jamie to delete records from XML table and Word List
         System.out.println("Selected table record for deletion!");
-        int column = 3;
+        int activeColumn = 3;
         for (int i = 0; i < jTable1.getRowCount(); i++){
             DefaultTableModel defaultModel = (DefaultTableModel) jTable1.getModel();
-            if (jTable1.getValueAt(i, column).equals(true)) {
+            if (jTable1.getValueAt(i, activeColumn).equals(true)) {
                 System.out.println("deleting row " + i);
                 defaultModel.removeRow(i);
             }}
     }//GEN-LAST:event_deleteSelectedBttnActionPerformed
-
-    private void jTable1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTable1FocusGained
-        
-    }//GEN-LAST:event_jTable1FocusGained
-
-    private void adminTabFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_adminTabFocusGained
-        
-    }//GEN-LAST:event_adminTabFocusGained
 
     //Fixes Issue #5. Checks for updated files and advises to reindex files.
     private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
