@@ -559,7 +559,7 @@ public class mainGUI extends javax.swing.JFrame {
         }
 
        //Check for index file and create it if it doesn't exist.
-        File indexFile = new File(".\\Endex.xml");
+        File indexFile = new File(System.getProperty("user.home")+System.getProperty("file.separator")+"Endex.xml");
         if (!indexFile.isFile()) {
             boolean isFileCreated = false;
             try {
@@ -579,7 +579,7 @@ public class mainGUI extends javax.swing.JFrame {
             }
             Document dom = null;
             try {
-                dom = builder.parse(".\\Endex.xml");
+                dom = builder.parse(System.getProperty("user.home")+System.getProperty("file.separator")+"Endex.xml");
             } catch (org.xml.sax.SAXException | IOException ex) {
                 Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
             }
