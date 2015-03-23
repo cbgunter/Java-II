@@ -424,7 +424,11 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
                             createXML(doc, i, fname, modDate, false);
                         }
                     }
-            //createArrayList(fileName);
+                try {
+                    createArrayList(fileName);
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 }
         }
 
@@ -435,14 +439,14 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
     }//GEN-LAST:event_savePathButtonActionPerformed
 
     private void deleteSelectedBttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteSelectedBttnActionPerformed
-        // TODO add your handling code here: Jamie to delete records from XML table and Word List
-        System.out.println("Selected table record for deletion!");
+        // TODO add your handling code here: Jamie needs to delete from ENDEX
+        //System.out.println("Selected table record for deletion!");
         int activeColumn = 3;
               
         for (int i = 0; i < jTable1.getRowCount(); i++){
             DefaultTableModel defaultModel = (DefaultTableModel) jTable1.getModel();
             if (jTable1.getValueAt(i, activeColumn).equals(true)) {
-                System.out.println("deleting row " + i);
+                //System.out.println("deleting row " + i);
                 defaultModel.removeRow(i);
             }}
     }//GEN-LAST:event_deleteSelectedBttnActionPerformed
@@ -568,7 +572,7 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
             }
         }
         
-        //searchFileTextBox.setText(indexFile);
+        //searchFileTextBox.setText(fileName);
         
     }
     
@@ -653,7 +657,7 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
     }
         
         
-     /*
+     // Creating the list of words in the indexed files as they are added.
     private void createArrayList(String fileName) throws FileNotFoundException {
         Scanner s = new Scanner(new File(fileName));
         ArrayList<String> list = new ArrayList<String>();
@@ -661,6 +665,7 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
             list.add(s.next());
         }
         s.close();
+    }
         
         //Checking the ArrayList
         /*
@@ -703,12 +708,12 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
                 String isNotCurrent = "Out of Date";
                 jTable1.setValueAt(isNotCurrent, i, statusColumn);
             }
-            /*
+            
             else{
                 String isCurrent = "Indexed";
                 jTable1.setValueAt(isCurrent, i, statusColumn);
             }
-                    */
+                    
         }
     }
 }
