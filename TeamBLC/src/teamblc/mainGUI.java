@@ -572,6 +572,16 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
             }
         }
         
+        //used to test the MainLogic class and getfileData method
+        MainLogic mLogic = new MainLogic();
+        try {
+            //get file data and return an Arraylist of bytes     
+            ArrayList byteArray = mLogic.getFileData(jTable1);
+            
+        } catch (IOException ex) {
+            Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         //searchFileTextBox.setText(fileName);
         
     }
