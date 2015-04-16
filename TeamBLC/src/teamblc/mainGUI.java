@@ -386,8 +386,11 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
         } catch (IOException ex) {
             Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
+        java.util.ArrayList<String> searchResults = new ArrayList<>(mLogic.searchFileData(listArray, "Any", searchTerms));
+        Object[] result = searchResults.toArray();
+        String resultSt = Arrays.toString(result);
         
-        resultsTextPane.setText(mLogic.searchFileData(listArray, "Any", searchTerms).get(0).toString());
+        resultsTextPane.setText(resultSt);
         
     }//GEN-LAST:event_searchButtonActionPerformed
 

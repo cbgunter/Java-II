@@ -56,10 +56,11 @@ public class MainLogic {
                                 lastMatch = ia;
                                 if (ia+5 > lastMatch){
                                     Object[] blah = wordList.subList(ia, ia+5).toArray();
-                                    String stringWL = Arrays.toString(blah);
+                                    String stringWL = Arrays.toString(blah).replace(", ", " ");
                                     searchResult.add(stringWL);
                                 }
-                                //gets the matched word plus the next 5
+                                
+                                
                                 
                                 
                             }
