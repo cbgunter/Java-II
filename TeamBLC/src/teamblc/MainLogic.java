@@ -17,25 +17,53 @@ public class MainLogic {
             fileList.add(i, jTabel.getValueAt(i, 0).toString());
         }
         
-        ArrayList<List> fileData = new ArrayList();
+        ArrayList<String> fileDataList = new ArrayList();
         for (int i = 0; i < rowCount; i++) {
             Path path = Paths.get(fileList.get(i));
-            List<String> list = Files.readAllLines(path);
-            fileData.add(i, list);
+            byte[] bytes = Files.readAllBytes(path);
+            String fileData = new String(bytes, "UTF-8");  
+            
+            fileDataList.add(i, fileData);
         }
+        //returns an arraylist of strings,
+        //each element in the subarraylist is the document in a 
+        //multiline string.
         
-        return fileData;
+        //fileDataList structure
+        //arraylist - fileDataList
+        //|_subList - fileData
+        //  |_String Data
+        
+        return fileDataList;
     }
     
-    public void searchFileData(ArrayList fileData, String searchType, String searchTerms ) {
-        int cnt = fileData.size();
+    public List searchFileData(ArrayList fileDataList, String searchType, ArrayList searchTerms ) {
+        int cnt = fileDataList.size();
+        int searchTermsCnt = searchTerms.size();
+        List<String> searchResult = new ArrayList<>();
+        
         for (int i = 0; i < cnt; i++) {
-            List<String> list = (List)fileData.get(i);
-            int cnt2 = list.size();
+            String fileData = (String)fileDataList.get(i);
+            List<String> wordList = new ArrayList<>(Arrays.asList(fileData.split(" ")));
+            int wordListCnt = wordList.size();
+            
             switch (searchType) {
                 case "Any":    
-                    for (int ia = 0; ia < cnt2; ia++) {
-                    
+                    for (int ia = 0; ia < wordListCnt; ia++) {
+                        for (int ib = 0; ib < searchTermsCnt; ib++) {
+                            int lastMatch = 0;
+                            if(wordList.get(ia).equalsIgnoreCase(searchTerms.get(ib).toString())){
+                                lastMatch = ia;
+                                if (ia+5 > lastMatch){
+                                    Object[] blah = wordList.subList(ia, ia+5).toArray();
+                                    String stringWL = Arrays.toString(blah);
+                                    searchResult.add(stringWL);
+                                }
+                                //gets the matched word plus the next 5
+                                
+                                
+                            }
+                        }
                     }
                 case "All":
                     //do something
@@ -43,6 +71,8 @@ public class MainLogic {
                     //do something
             }
         }
+        
+        return searchResult;
     }
     
 }

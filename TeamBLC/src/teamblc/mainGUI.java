@@ -16,7 +16,10 @@ import javax.swing.JOptionPane;
 import java.text.SimpleDateFormat;
 import java.io.StringWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.util.*;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -375,6 +378,17 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
 
     private void searchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchButtonActionPerformed
         checkBlankInput(searchTextPane1.getText(), searchTab);
+        
+        java.util.ArrayList<String> searchTerms = new ArrayList<>(Arrays.asList(searchTextPane1.getText().split(" ")));
+        ArrayList listArray = null;
+        try {
+            listArray = mLogic.getFileData(jTable1);
+        } catch (IOException ex) {
+            Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        resultsTextPane.setText(mLogic.searchFileData(listArray, "Any", searchTerms).get(0).toString());
+        
     }//GEN-LAST:event_searchButtonActionPerformed
 
     //Fixes Issue#2 - Allows entry of new file to jTable and popualtes requires info.
@@ -460,6 +474,7 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
      * @param args the command line arguments
      */
     static boolean isFileCreated;
+    static MainLogic mLogic = new MainLogic();
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -573,14 +588,11 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
         }
         
         //used to test the MainLogic class and getfileData method
-        MainLogic mLogic = new MainLogic();
+        
         try {
             //get file data and return an Arraylist of bytes     
             ArrayList listArray = mLogic.getFileData(jTable1);
-            
-            //mLogic.searchFileData(listArray);
-            
-            
+                
         } catch (IOException ex) {
             Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
