@@ -113,7 +113,7 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
         searchDropDown1.setBackground(new java.awt.Color(0, 204, 255));
         searchDropDown1.setEditable(true);
         searchDropDown1.setMaximumRowCount(3);
-        searchDropDown1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All of the Search Terms", "Any of the Search Terms", "Exact Match", " " }));
+        searchDropDown1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All of the Search Terms", "Any of the Search Terms", "Exact Match", "" }));
 
         searchButton.setBackground(new java.awt.Color(0, 204, 255));
         searchButton.setText("Search");
@@ -576,7 +576,10 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
         MainLogic mLogic = new MainLogic();
         try {
             //get file data and return an Arraylist of bytes     
-            ArrayList byteArray = mLogic.getFileData(jTable1);
+            ArrayList listArray = mLogic.getFileData(jTable1);
+            
+            //mLogic.searchFileData(listArray);
+            
             
         } catch (IOException ex) {
             Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);

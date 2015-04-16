@@ -162,7 +162,7 @@
                         <StringItem index="0" value="All of the Search Terms"/>
                         <StringItem index="1" value="Any of the Search Terms"/>
                         <StringItem index="2" value="Exact Match"/>
-                        <StringItem index="3" value=" "/>
+                        <StringItem index="3" value=""/>
                       </StringArray>
                     </Property>
                   </Properties>
