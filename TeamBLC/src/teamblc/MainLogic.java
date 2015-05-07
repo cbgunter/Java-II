@@ -6,7 +6,9 @@ import java.io.*;
 import java.nio.file.*;
 /**
  *
- * @author cmaxey
+ * @author Chris Maxey
+ * @author Jamie Banas
+ * @author Corey Gunter
  */
 public class MainLogic {
     
@@ -17,11 +19,11 @@ public class MainLogic {
             fileList.add(i, jTabel.getValueAt(i, 0).toString());
         }
         
-        ArrayList<String> fileDataList = new ArrayList();
+        ArrayList<List> fileDataList = new ArrayList();
         for (int i = 0; i < rowCount; i++) {
             Path path = Paths.get(fileList.get(i));
-            byte[] bytes = Files.readAllBytes(path);
-            String fileData = new String(bytes, "UTF-8");  
+            List<String> fileData = Files.readAllLines(path);
+            //ArrayList<String> fileData = new String(bytes, "UTF-8");  
             
             fileDataList.add(i, fileData);
         }
@@ -42,34 +44,45 @@ public class MainLogic {
         int searchTermsCnt = searchTerms.size();
         List<String> searchResult = new ArrayList<>();
         
-        for (int i = 0; i < cnt; i++) {
-            String fileData = (String)fileDataList.get(i);
-            List<String> wordList = new ArrayList<>(Arrays.asList(fileData.split(" ")));
-            int wordListCnt = wordList.size();
-            
+        for (int i = 0; i < cnt; i++) {   
+            List<String> fileData = (List<String>)fileDataList.get(i);
+            int fileDataCnt = fileData.size();
             switch (searchType) {
-                case "Any":    
-                    for (int ia = 0; ia < wordListCnt; ia++) {
+                case "Any":     
+                    for (int ia = 0; ia < fileDataCnt; ia++) {
                         for (int ib = 0; ib < searchTermsCnt; ib++) {
-                            int lastMatch = 0;
-                            if(wordList.get(ia).equalsIgnoreCase(searchTerms.get(ib).toString())){
-                                lastMatch = ia;
-                                if (ia+5 > lastMatch){
-                                    Object[] blah = wordList.subList(ia, ia+5).toArray();
-                                    String stringWL = Arrays.toString(blah).replace(", ", " ");
+                            String[] line = fileData.get(ia).split(" ");
+                            for (String line1 : line) {
+                                if (line1.toLowerCase().equals(searchTerms.get(ib).toString().toLowerCase())) {
+                                    String stringWL = "The search term " + searchTerms.get(ib).toString() + ", found in file#" + i + " On line#" + ia ;
                                     searchResult.add(stringWL);
                                 }
-                                
-                                
-                                
-                                
                             }
                         }
                     }
                 case "All":
-                    //do something
+                    for (int ia = 0; ia < fileDataCnt; ia++) {
+                        String[] line = fileData.get(ia).toLowerCase().split(" ");
+                        List<String> linelist = Arrays.asList(line);
+                        ArrayList<String> searchTerms2 = searchTerms;
+                        for(int ib=0; ib < searchTerms2.size(); ib++) {
+                            searchTerms2.set(ib, searchTerms2.get(ib).toLowerCase());
+                        }
+                        
+                        if (linelist.containsAll(searchTerms)){
+                            String stringWL = "The search terms were found in file#" + i + " On line#" + ia ;
+                            searchResult.add(stringWL);
+                        }
+                    }
                 case "Exact":
-                    //do something
+                    for (int ia = 0; ia < fileDataCnt; ia++) {
+                        String[] line = fileData.get(ia).split(" ");
+                        List<String> linelist = Arrays.asList(line);
+                        if (linelist.containsAll(searchTerms)){
+                            String stringWL = "The search terms were found in file#" + i + " On line#" + ia ;
+                            searchResult.add(stringWL);
+                        }
+                    }
             }
         }
         

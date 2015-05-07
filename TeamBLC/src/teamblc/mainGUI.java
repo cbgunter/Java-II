@@ -117,6 +117,11 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
         searchDropDown1.setEditable(true);
         searchDropDown1.setMaximumRowCount(3);
         searchDropDown1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "All of the Search Terms", "Any of the Search Terms", "Exact Match", "" }));
+        searchDropDown1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchDropDown1ActionPerformed(evt);
+            }
+        });
 
         searchButton.setBackground(new java.awt.Color(0, 204, 255));
         searchButton.setText("Search");
@@ -386,7 +391,7 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
         } catch (IOException ex) {
             Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-        java.util.ArrayList<String> searchResults = new ArrayList<>(mLogic.searchFileData(listArray, "Any", searchTerms));
+        java.util.ArrayList<String> searchResults = new ArrayList<>(mLogic.searchFileData(listArray, searchType , searchTerms));
         Object[] result = searchResults.toArray();
         String resultSt = Arrays.toString(result);
         
@@ -473,11 +478,19 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
         checkTheDates();
     }//GEN-LAST:event_jTabbedPane1MouseClicked
 
+    private void searchDropDown1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchDropDown1ActionPerformed
+        int index = searchDropDown1.getSelectedIndex();
+        if (index == 0) { searchType = "All"; }
+        if (index == 1) { searchType = "Any";}
+        if (index == 2) { searchType = "Exact";}
+    }//GEN-LAST:event_searchDropDown1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
     static boolean isFileCreated;
     static MainLogic mLogic = new MainLogic();
+    static String searchType = "All";
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
