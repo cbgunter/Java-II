@@ -54,7 +54,7 @@ public class MainLogic {
                             String[] line = fileData.get(ia).split(" ");
                             for (String line1 : line) {
                                 if (line1.toLowerCase().equals(searchTerms.get(ib).toString().toLowerCase())) {
-                                    String stringWL = "The search term " + searchTerms.get(ib).toString() + ", found in file#" + i + " On line#" + ia ;
+                                    String stringWL = "The search term " + searchTerms.get(ib).toString() + " found in file #" + i + " On line #" + ia + "\n" ;
                                     searchResult.add(stringWL);
                                 }
                             }
@@ -70,7 +70,7 @@ public class MainLogic {
                         }
                         
                         if (linelist.containsAll(searchTerms)){
-                            String stringWL = "The search terms were found in file#" + i + " On line#" + ia ;
+                            String stringWL = "The search terms were found in file #" + i + " On line #" + ia + "\n" ;
                             searchResult.add(stringWL);
                         }
                     }
@@ -79,7 +79,7 @@ public class MainLogic {
                         String[] line = fileData.get(ia).split(" ");
                         List<String> linelist = Arrays.asList(line);
                         if (linelist.containsAll(searchTerms)){
-                            String stringWL = "The search terms were found in file#" + i + " On line#" + ia ;
+                            String stringWL = "The search terms were found in file #" + i + " On line #" + ia + "\n" ;
                             searchResult.add(stringWL);
                         }
                     }
