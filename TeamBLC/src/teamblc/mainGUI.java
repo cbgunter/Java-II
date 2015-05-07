@@ -88,12 +88,12 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
         resultsTextPane = new javax.swing.JTextPane();
         adminTab = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        searchFileTextBox = new javax.swing.JTextField();
         openFileDialog = new javax.swing.JButton();
         savePathButton = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         deleteSelectedBttn = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
@@ -244,9 +244,9 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
                         .addContainerGap()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchFileTextBox))
+                        .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 70, Short.MAX_VALUE)
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(136, 136, 136)
                         .addComponent(openFileDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -261,8 +261,8 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(searchFileTextBox, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(openFileDialog)
@@ -452,7 +452,7 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
     }//GEN-LAST:event_openFileDialogActionPerformed
 
     private void savePathButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_savePathButtonActionPerformed
-        checkBlankInput(searchFileTextBox.getText(), adminTab);
+        //checkBlankInput(searchFileTextBox.getText(), adminTab);
     }//GEN-LAST:event_savePathButtonActionPerformed
 
     private void deleteSelectedBttnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteSelectedBttnActionPerformed
@@ -487,6 +487,7 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private static javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
@@ -499,7 +500,6 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
     private javax.swing.JButton savePathButton;
     private javax.swing.JButton searchButton;
     private javax.swing.JComboBox searchDropDown1;
-    private javax.swing.JTextField searchFileTextBox;
     private javax.swing.JLabel searchLabel1;
     private javax.swing.JScrollPane searchScrollPanel1;
     private javax.swing.JPanel searchSection;
@@ -600,7 +600,7 @@ public class mainGUI extends javax.swing.JFrame implements TeamBLCConstants {
             Logger.getLogger(mainGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        //searchFileTextBox.setText(fileName);
+        jLabel4.setText(indexFile.getAbsolutePath());
         
     }
     
